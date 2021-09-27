@@ -261,6 +261,18 @@ public class jTPCCConnection
 		    "    ) AS L");
 		break;
 
+		case jTPCCConfig.DB_FIREBIRD:
+			stmtStockLevelSelectLow = dbConn.prepareStatement(
+					"SELECT COUNT(DISTINCT(s_i_id)) AS low_stock " +
+							"FROM bmsql_district join bmsql_order_line on d_w_id=ol_w_id AND d_id=ol_d_id " +
+							"join bmsql_stock ON s_i_id=ol_i_id AND ol_w_id=s_w_id " +
+							"WHERE ol_o_id>=d_next_o_id-20 AND ol_o_id<d_next_o_id AND " +
+							"s_w_id=? AND " +
+							"s_quantity<? AND " +
+							"s_w_id=? AND " +
+							"ol_d_id=?");
+			break;
+
 	    default:
 		stmtStockLevelSelectLow = dbConn.prepareStatement(
 		    "SELECT count(*) AS low_stock FROM (" +
